@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adrian's classroom | TIC — Contabilidad y Auditoría (UTA)</title>
+
+  <!-- Fuente tipográfica Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            uta: {
+              DEFAULT: '#8B1E24',
+              dark: '#6E161B',
+              light: '#FDF2F2',
+              border: '#F3D1D3',
+            },
+            canvas: '#F8F9FA',
+            ink: '#1F2937',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Transiciones suaves para vistas y tarjetas */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-view {
+      animation: fadeSlideUp 0.28s ease-out forwards;
+    }
+
+    /* Scrollbar sutil para tablas en dispositivos pequeños */
+    .table-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+    .table-scroll::-webkit-scrollbar-track {
+      background: #F3F4F6;
+      border-radius: 9999px;
+    }
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: #D1D5DB;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-canvas text-ink font-sans antialiased min-h-screen flex flex-col selection:bg-uta-light selection:text-uta">
+
+  <!-- Barra institucional superior -->
+  <div class="w-full h-1.5 bg-uta"></div>
+
+  <!-- Encabezado principal -->
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <!-- Badges institucionales -->
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wide uppercase bg-uta text-white">
+          Universidad Técnica de Ambato
+        </span>
+        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium tracking-wide uppercase bg-gray-100 text-gray-700 border border-gray-200">
+          Facultad de Contabilidad y Auditoría
+        </span>
+        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium tracking-wide uppercase bg-uta-light text-uta border border-uta-border">
+          Tecnologías de la Información y la Comunicación
+        </span>
+      </div>
+
+      <!-- Título y descripción -->
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
+            Adrian's classroom
+          </h1>
+          <p class="mt-1.5 text-sm sm:text-base text-gray-600 max-w-2xl">
+            Repositorio académico interactivo para el estudio de búsqueda científica, bases de datos, ofimática profesional, presentaciones colaborativas e inteligencia artificial generativa.
+          </p>
+        </div>
+
+        <!-- Indicador de progreso / acceso rápido -->
+        <div class="flex items-center gap-2 text-xs text-gray-500 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 self-start sm:self-end">
+          <span class="w-2 h-2 rounded-full bg-uta"></span>
+          <span>Contenidos: <strong>Unidades 3 y 4</strong></span>
+        </div>
+      </div>
+
+      <!-- Navegación principal por pestañas (Unidad 3 y Unidad 4) -->
+      <nav aria-label="Navegación de unidades" class="mt-7 grid grid-cols-2 gap-3 sm:gap-4">
+        <button
+          id="tab-u3"
+          type="button"
+          onclick="selectUnit('u3')"
+          class="group flex flex-col sm:flex-row sm:items-center sm:justify-between text-left px-4 sm:px-5 py-3.5 rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-uta/30"
+        >
+          <div>
+            <span class="block text-xs font-semibold uppercase tracking-wider opacity-80">Módulo Académico</span>
+            <span class="block text-base sm:text-lg font-bold mt-0.5">Unidad 3</span>
+          </div>
+          <span class="hidden sm:inline-block text-xs font-medium px-2.5 py-1 rounded-full bg-white/15">
+            Búsqueda y Bases de Datos
+          </span>
+        </button>
+
+        <button
+          id="tab-u4"
+          type="button"
+          onclick="selectUnit('u4')"
+          class="group flex flex-col sm:flex-row sm:items-center sm:justify-between text-left px-4 sm:px-5 py-3.5 rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-uta/30"
+        >
+          <div>
+            <span class="block text-xs font-semibold uppercase tracking-wider opacity-80">Módulo Académico</span>
+            <span class="block text-base sm:text-lg font-bold mt-0.5">Unidad 4</span>
+          </div>
+          <span class="hidden sm:inline-block text-xs font-medium px-2.5 py-1 rounded-full bg-white/15">
+            Ofimática, Presentaciones e IA
+          </span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenido principal dinámico -->
+  <main id="main-content" class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <!-- Se renderiza mediante JavaScript según la unidad y tema activos -->
+  </main>
+
+  <!-- Notificación flotante discreta (reemplaza alert/confirm) -->
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-gray-900 text-white text-sm px-4 py-3 rounded-xl shadow-lg border border-gray-800 flex items-center gap-2.5"
+  >
+    <span id="toast-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+    <span id="toast-message"></span>
+  </div>
+
+  <!-- Pie de página minimalista -->
+  <footer class="bg-white border-t border-gray-200 mt-auto">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-gray-500">
+      <p class="font-medium text-gray-700">
+        Adrian's classroom — Contabilidad y Auditoría, UTA
+      </p>
+      <p>
+        Tecnologías de la Información y la Comunicación
+      </p>
+    </div>
+  </footer>
+
+  <!-- Lógica interactiva y base de contenidos -->
+  <script>
+    // =========================================================================
+    // 1. ESTADO DE LA APLICACIÓN Y ALMACENAMIENTO LOCAL DE VIDEOS
+    // =========================================================================
+    const STORAGE_KEY = 'adrians_classroom_custom_videos_v1';
+
+    const appState = {
+      currentUnit: 'u3',     // 'u3' | 'u4'
+      currentTopic: null,    // null (lista de temas) | 'u3-t1' | 'u3-t2' | 'u4-t1' | 'u4-t2'
+      customVideos: loadCustomVideos(),
+    };
+
+    function loadCustomVideos() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveCustomVideos() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState.customVideos));
+      } catch (e) {
+        showToast('No se pudo guardar en el navegador.', 'error');
+      }
+    }
+
+    // Extrae el ID de 11 caracteres desde cualquier formato común de URL de YouTube
+    function extractYouTubeId(url) {
+      if (!url) return null;
+      const trimmed = url.trim();
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([A-Za-z0-9_-]{11})/,
+        /[?&]v=([A-Za-z0-9_-]{11})/,
+      ];
+      for (const regex of patterns) {
+        const match = trimmed.match(regex);
+        if (match && match[1]) return match[1];
+      }
+      return null;
+    }
+
+    // Escapa HTML básico para prevenir inyección al renderizar títulos escritos por el usuario
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Toast discreto de retroalimentación
+    let toastTimer = null;
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const msgEl = document.getElementById('toast-message');
+      const dotEl = document.getElementById('toast-dot');
+
+      msgEl.textContent = message;
+      dotEl.className = 'w-2 h-2 rounded-full shrink-0 ' + (type === 'error' ? 'bg-red-400' : 'bg-emerald-400');
+
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    // =========================================================================
+    // 2. DATOS ESTRUCTURADOS DE UNIDADES Y TEMAS
+    // =========================================================================
+    const UNITS_DATA = {
+      u3: {
+        id: 'u3',
+        label: 'Unidad 3',
+        title: 'Búsqueda de Información y Bases de Datos Científicas',
+        description:
+          'Metodologías para localizar, filtrar y evaluar información académica confiable mediante estrategias de búsqueda y plataformas científicas indexadas.',
+        topics: [
+          {
+            id: 'u3-t1',
+            number: 'Tema 1',
+            title: 'Etapas y Técnicas del Proceso de Búsqueda de Información',
+            summary:
+              'Definición del nivel y cobertura, selección de fuentes confiables y construcción de estrategias con operadores booleanos y filtros avanzados.',
+            tags: ['Nivel y cobertura', 'Fuentes confiables', 'Operadores booleanos'],
+            videos: [
+              {
+                title: 'Etapas del proceso de búsqueda de información académica',
+                subtitle: 'Tutoriales paso a paso sobre delimitación y fuentes científicas',
+                url: 'https://www.youtube.com/results?search_query=etapas+proceso+busqueda+informacion+academica',
+              },
+              {
+                title: 'Uso de operadores booleanos (AND, OR, NOT) en investigación',
+                subtitle: 'Ejemplos prácticos para mejorar la precisión de resultados',
+                url: 'https://www.youtube.com/results?search_query=operadores+booleanos+busqueda+cientifica',
+              },
+            ],
+          },
+          {
+            id: 'u3-t2',
+            number: 'Tema 2',
+            title: 'Bases de Datos Científicas y Académicas',
+            summary:
+              'Exploración y comparación de las principales plataformas de investigación: Google Académico, Latindex, SciELO y Scopus.',
+            tags: ['Google Académico', 'Latindex', 'SciELO', 'Scopus'],
+            videos: [
+              {
+                title: 'Cómo buscar artículos en Google Académico y citar en APA',
+                subtitle: 'Búsqueda avanzada, perfiles y gestión de citas',
+                url: 'https://www.youtube.com/results?search_query=como+usar+google+academico+busqueda+avanzada',
+              },
+              {
+                title: 'Tutorial de búsqueda en SciELO, Latindex y Scopus',
+                subtitle: 'Acceso abierto, revistas indexadas e indicadores de impacto',
+                url: 'https://www.youtube.com/results?search_query=como+buscar+en+scielo+latindex+scopus',
+              },
+            ],
+          },
+        ],
+      },
+      u4: {
+        id: 'u4',
+        label: 'Unidad 4',
+        title: 'Ofimática Profesional, Presentaciones Colaborativas e IA Generativa',
+        description:
+          'Dominio de herramientas de productividad documental, análisis contable en hojas de cálculo, presentaciones en la nube e inteligencia artificial aplicada.',
+        topics: [
+          {
+            id: 'u4-t1',
+            number: 'Tema 1',
+            title: 'Procesador de Textos y Hoja de Cálculo',
+            summary:
+              'Aplicación profesional de Word/Google Docs para informes y auditorías, junto con Excel/Google Sheets para análisis contable y financiero.',
+            tags: ['Procesadores de texto', 'Normas APA', 'Hojas de cálculo', 'Contabilidad'],
+            videos: [
+              {
+                title: 'Word profesional: Normas APA, estilos y tablas de contenido',
+                subtitle: 'Maquetación automatizada de informes y trabajos académicos',
+                url: 'https://www.youtube.com/results?search_query=word+profesional+normas+apa+tabla+de+contenido',
+              },
+              {
+                title: 'Excel aplicado a contabilidad, finanzas y tablas dinámicas',
+                subtitle: 'Fórmulas clave, análisis financiero y reportes ejecutivos',
+                url: 'https://www.youtube.com/results?search_query=excel+aplicado+a+contabilidad+tablas+dinamicas',
+              },
+            ],
+          },
+          {
+            id: 'u4-t2',
+            number: 'Tema 2',
+            title: 'Software, Presentaciones Colaborativas y Herramientas de IA Generativa',
+            summary:
+              'Comunicación visual efectiva con PowerPoint, Prezi y Canva, trabajo en equipo en la nube y uso responsable de Microsoft Copilot y Google Gemini.',
+            tags: ['PowerPoint, Prezi y Canva', 'Trabajo colaborativo', 'Copilot y Gemini'],
+            videos: [
+              {
+                title: 'Presentaciones efectivas con PowerPoint, Prezi y Canva',
+                subtitle: 'Diseño visual limpio, jerarquía y trabajo colaborativo',
+                url: 'https://www.youtube.com/results?search_query=presentaciones+efectivas+powerpoint+prezi+canva',
+              },
+              {
+                title: 'Microsoft Copilot y Google Gemini en el ámbito académico',
+                subtitle: 'Redacción asistida, análisis de datos y prompts responsables',
+                url: 'https://www.youtube.com/results?search_query=microsoft+copilot+google+gemini+academico+tutorial',
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    // =========================================================================
+    // 3. PLANTILLAS DE CONTENIDO DETALLADO POR TEMA
+    // =========================================================================
+    function getTopicDetailHtml(topicId) {
+      switch (topicId) {
+        case 'u3-t1':
+          return `
+            <!-- Subtema 1.1 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">1.1</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Establecer el nivel y la cobertura de la búsqueda</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-5">
+                Antes de consultar cualquier buscador, es indispensable definir con claridad la <strong>necesidad de información</strong> y delimitar el alcance de la investigación para evitar resultados irrelevantes o desactualizados.
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200/80">
+                  <h4 class="text-sm font-semibold text-gray-900 mb-1">Alcance temático</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Precisar el tema central, subtemas y el enfoque disciplinar (ej. auditoría financiera, normativa tributaria o gestión de TIC).</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200/80">
+                  <h4 class="text-sm font-semibold text-gray-900 mb-1">Cobertura cronológica</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Establecer el rango temporal pertinente; en trabajos académicos se priorizan fuentes de los <strong>últimos 5 años</strong>, salvo textos clásicos o normas vigentes.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200/80">
+                  <h4 class="text-sm font-semibold text-gray-900 mb-1">Cobertura geográfica e idioma</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Definir si se requiere contexto local (Ecuador/Latinoamérica) o internacional, contemplando literatura en español e inglés.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200/80 sm:col-span-2 lg:col-span-3">
+                  <h4 class="text-sm font-semibold text-gray-900 mb-1">Tipo de documento y profundidad</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Determinar si se busca una introducción general o evidencia científica especializada: <strong>artículos científicos revisados por pares, tesis de grado/posgrado, normas técnicas (NIIF/NIA), leyes o libros académicos</strong>.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Subtema 1.2 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">1.2</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Seleccionar las fuentes de información a utilizar</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-5">
+                Las fuentes se clasifican según su grado de originalidad y procesamiento. Elegir las adecuadas garantiza el rigor académico de un trabajo universitario.
+              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                  <span class="text-xs font-semibold uppercase tracking-wide text-uta">Fuentes Primarias</span>
+                  <h4 class="text-sm font-bold text-gray-900 mt-1 mb-1.5">Información original</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Datos directos no interpretados por terceros: artículos de investigación empírica, tesis, estados financieros, leyes, normas y encuestas propias.</p>
+                </div>
+                <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                  <span class="text-xs font-semibold uppercase tracking-wide text-uta">Fuentes Secundarias</span>
+                  <h4 class="text-sm font-bold text-gray-900 mt-1 mb-1.5">Análisis y síntesis</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Interpretan, comentan o resumen fuentes primarias: artículos de revisión sistemática, manuales universitarios, libros de texto y críticas especializadas.</p>
+                </div>
+                <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                  <span class="text-xs font-semibold uppercase tracking-wide text-uta">Fuentes Terciarias</span>
+                  <h4 class="text-sm font-bold text-gray-900 mt-1 mb-1.5">Guías y compilaciones</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Facilitan la localización de otras fuentes: catálogos bibliográficos, diccionarios, directorios de revistas (como Latindex) y bases de datos referenciales.</p>
+                </div>
+              </div>
+
+              <div class="rounded-xl bg-gray-50 border border-gray-200 p-4 sm:p-5">
+                <h4 class="text-sm font-bold text-gray-900 mb-2.5">Criterios de evaluación de confiabilidad</h4>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm text-gray-700">
+                  <li class="flex items-start gap-2"><span class="text-uta font-bold">•</span><span><strong>Autoría:</strong> Identificación clara del autor, filiación universitaria y trayectoria.</span></li>
+                  <li class="flex items-start gap-2"><span class="text-uta font-bold">•</span><span><strong>Vigencia:</strong> Fecha de publicación o actualización acorde al área de estudio.</span></li>
+                  <li class="flex items-start gap-2"><span class="text-uta font-bold">•</span><span><strong>Rigor metodológico:</strong> Uso de referencias bibliográficas verificables y revisión por pares.</span></li>
+                  <li class="flex items-start gap-2"><span class="text-uta font-bold">•</span><span><strong>Respaldo institucional:</strong> Publicado por universidades, editoriales científicas u organismos oficiales.</span></li>
+                </ul>
+              </div>
+            </section>
+
+            <!-- Subtema 1.3 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">1.3</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Elaborar la estrategia de búsqueda</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-5">
+                Una estrategia eficaz traduce el tema en <strong>palabras clave (keywords)</strong> y sinónimos (en español e inglés), combinados mediante operadores lógicos y filtros avanzados.
+              </p>
+
+              <!-- Tabla práctica de operadores -->
+              <div class="overflow-x-auto table-scroll rounded-xl border border-gray-200 mb-5">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                  <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-gray-700">
+                      <th class="py-3 px-4 font-semibold">Operador / Técnica</th>
+                      <th class="py-3 px-4 font-semibold">Función</th>
+                      <th class="py-3 px-4 font-semibold">Ejemplo práctico</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 text-gray-600">
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-uta whitespace-nowrap">AND</td>
+                      <td class="py-3 px-4">Exige que aparezcan <strong>todos</strong> los términos (restringe y precisa).</td>
+                      <td class="py-3 px-4 font-mono text-xs text-gray-800">auditoría AND "control interno"</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-uta whitespace-nowrap">OR</td>
+                      <td class="py-3 px-4">Recupera cualquiera de los términos (amplía con sinónimos).</td>
+                      <td class="py-3 px-4 font-mono text-xs text-gray-800">pymes OR "pequeñas empresas"</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-uta whitespace-nowrap">NOT / -</td>
+                      <td class="py-3 px-4">Excluye términos no deseados del resultado.</td>
+                      <td class="py-3 px-4 font-mono text-xs text-gray-800">contabilidad NOT gubernamental</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Comillas " "</td>
+                      <td class="py-3 px-4">Busca la <strong>frase exacta</strong> en el mismo orden.</td>
+                      <td class="py-3 px-4 font-mono text-xs text-gray-800">"auditoría forense"</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">Truncamiento *</td>
+                      <td class="py-3 px-4">Incluye todas las variantes a partir de una raíz.</td>
+                      <td class="py-3 px-4 font-mono text-xs text-gray-800">tribut* (tributo, tributaria, tributación)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                <span class="font-semibold text-gray-800">Filtros avanzados recomendados:</span>
+                <span class="px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200">Rango de años</span>
+                <span class="px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200">Idioma</span>
+                <span class="px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200">Área temática</span>
+                <span class="px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200">Acceso abierto (PDF)</span>
+                <span class="px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200">Tipo de documento</span>
+              </div>
+            </section>
+
+            <!-- Enlaces académicos de referencia -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3">Fuentes académicas de referencia</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 hover:border-uta hover:bg-uta-light/40 transition-colors group">
+                  <div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-uta">Google Académico</p>
+                    <p class="text-xs text-gray-500">Práctica de búsqueda avanzada y comillas</p>
+                  </div>
+                  <span class="text-xs font-semibold text-uta">Abrir ↗</span>
+                </a>
+                <a href="https://bibliotecas.uta.edu.ec" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 hover:border-uta hover:bg-uta-light/40 transition-colors group">
+                  <div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-uta">Sistema de Bibliotecas UTA</p>
+                    <p class="text-xs text-gray-500">Catálogo institucional y recursos digitales</p>
+                  </div>
+                  <span class="text-xs font-semibold text-uta">Abrir ↗</span>
+                </a>
+              </div>
+            </section>
+          `;
+
+        case 'u3-t2':
+          return `
+            <!-- Tarjetas de las 4 bases de datos -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Google Académico -->
+              <article class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-between hover:border-gray-300 transition-colors">
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">Buscador Académico</span>
+                    <span class="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Gratuito</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">Google Académico (Google Scholar)</h3>
+                  <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                    Motor de búsqueda especializado en literatura científico-académica de cobertura multidisciplinaria: indexa artículos, tesis, libros, resúmenes y repositorios universitarios.
+                  </p>
+                  <ul class="space-y-1.5 text-xs sm:text-sm text-gray-600 mb-5">
+                    <li>• Generación automática de citas en <strong>APA, ISO 690 y MLA</strong>.</li>
+                    <li>• Seguimiento de citas recibidas, perfiles de autores y <strong>alertas temáticas</strong>.</li>
+                  </ul>
+                </div>
+                <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 rounded-xl bg-gray-900 hover:bg-uta text-white text-xs sm:text-sm font-medium transition-colors">
+                  Ir a Google Académico <span>↗</span>
+                </a>
+              </article>
+
+              <!-- Latindex -->
+              <article class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-between hover:border-gray-300 transition-colors">
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">Sistema Regional</span>
+                    <span class="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Acceso Abierto</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">Latindex</h3>
+                  <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                    Sistema Regional de Información en Línea para Revistas Científicas de <strong>América Latina, el Caribe, España y Portugal</strong>. Es referente clave para verificar la calidad editorial de revistas iberoamericanas.
+                  </p>
+                  <ul class="space-y-1.5 text-xs sm:text-sm text-gray-600 mb-5">
+                    <li>• <strong>Directorio:</strong> registro bibliográfico general de revistas de la región.</li>
+                    <li>• <strong>Catálogo 2.0:</strong> selección de revistas en línea con altos estándares editoriales.</li>
+                  </ul>
+                </div>
+                <a href="https://www.latindex.org" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 rounded-xl bg-gray-900 hover:bg-uta text-white text-xs sm:text-sm font-medium transition-colors">
+                  Ir a Latindex <span>↗</span>
+                </a>
+              </article>
+
+              <!-- SciELO -->
+              <article class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-between hover:border-gray-300 transition-colors">
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">Biblioteca Electrónica</span>
+                    <span class="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Texto Completo</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">SciELO (Scientific Electronic Library Online)</h3>
+                  <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                    Red cooperativa de bibliotecas electrónicas de acceso abierto que reúne colecciones seleccionadas de revistas científicas iberoamericanas en <strong>texto completo gratuito</strong>.
+                  </p>
+                  <ul class="space-y-1.5 text-xs sm:text-sm text-gray-600 mb-5">
+                    <li>• Descarga directa en PDF/HTML sin muros de pago.</li>
+                    <li>• Incluye colección nacional <strong>SciELO Ecuador</strong> e indicadores bibliométricos.</li>
+                  </ul>
+                </div>
+                <a href="https://scielo.org" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 rounded-xl bg-gray-900 hover:bg-uta text-white text-xs sm:text-sm font-medium transition-colors">
+                  Ir a SciELO <span>↗</span>
+                </a>
+              </article>
+
+              <!-- Scopus -->
+              <article class="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col justify-between hover:border-gray-300 transition-colors">
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">Base Referencial Elsevier</span>
+                    <span class="text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">Suscripción Institucional</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">Scopus</h3>
+                  <p class="text-sm text-gray-600 leading-relaxed mb-3">
+                    Base de datos referencial y de citas de <strong>Elsevier</strong> que indexa literatura científica internacional estrictamente revisada por pares, indispensable en investigación de alto nivel.
+                  </p>
+                  <ul class="space-y-1.5 text-xs sm:text-sm text-gray-600 mb-5">
+                    <li>• Métricas de impacto reconocidas mundialmente: <strong>CiteScore, SJR e Índice H</strong>.</li>
+                    <li>• Herramientas avanzadas de análisis de tendencias, coautorías y cuartiles (Q1–Q4).</li>
+                  </ul>
+                </div>
+                <a href="https://www.scopus.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 rounded-xl bg-gray-900 hover:bg-uta text-white text-xs sm:text-sm font-medium transition-colors">
+                  Ir a Scopus <span>↗</span>
+                </a>
+              </article>
+            </section>
+
+            <!-- Tabla comparativa -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <h3 class="text-lg font-bold text-gray-900 mb-1">Cuadro comparativo de bases de datos</h3>
+              <p class="text-xs sm:text-sm text-gray-500 mb-4">Resumen de criterios clave para elegir la plataforma adecuada según el objetivo de investigación.</p>
+              <div class="overflow-x-auto table-scroll rounded-xl border border-gray-200">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                  <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-gray-700">
+                      <th class="py-3 px-4 font-semibold">Plataforma</th>
+                      <th class="py-3 px-4 font-semibold">Acceso</th>
+                      <th class="py-3 px-4 font-semibold">Enfoque / Cobertura</th>
+                      <th class="py-3 px-4 font-semibold">Idioma principal</th>
+                      <th class="py-3 px-4 font-semibold">Ventaja clave</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 text-gray-600">
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-gray-900">Google Académico</td>
+                      <td class="py-3 px-4">Gratuito (mixto)</td>
+                      <td class="py-3 px-4">Mundial y multidisciplinaria</td>
+                      <td class="py-3 px-4">Multilingüe</td>
+                      <td class="py-3 px-4">Rapidez, amplitud y cita rápida en APA</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-gray-900">Latindex</td>
+                      <td class="py-3 px-4">Gratuito / Abierto</td>
+                      <td class="py-3 px-4">Iberoamérica y el Caribe</td>
+                      <td class="py-3 px-4">Español / Portugués</td>
+                      <td class="py-3 px-4">Validación de calidad editorial (Catálogo 2.0)</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-gray-900">SciELO</td>
+                      <td class="py-3 px-4">Acceso abierto total</td>
+                      <td class="py-3 px-4">Revistas científicas iberoamericanas</td>
+                      <td class="py-3 px-4">Español / Portugués / Inglés</td>
+                      <td class="py-3 px-4">Artículos en texto completo sin costo</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50/70">
+                      <td class="py-3 px-4 font-semibold text-gray-900">Scopus</td>
+                      <td class="py-3 px-4">Suscripción (institucional)</td>
+                      <td class="py-3 px-4">Internacional de alto impacto</td>
+                      <td class="py-3 px-4">Inglés (predominante)</td>
+                      <td class="py-3 px-4">Rigor científico, CiteScore e Índice H</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          `;
+
+        case 'u4-t1':
+          return `
+            <!-- Subtema 1.1 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">1.1</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Generalidades y aplicaciones de los procesadores de texto en el ámbito profesional</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-5">
+                Los procesadores de texto modernos —como <strong>Microsoft Word</strong> y <strong>Google Docs</strong>— trascienden la escritura básica: permiten estructurar, automatizar y estandarizar documentación formal en entornos corporativos y académicos.
+              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 sm:p-5 rounded-xl bg-gray-50 border border-gray-200">
+                  <h4 class="text-sm font-bold text-gray-900 mb-2.5">Funciones profesionales clave</h4>
+                  <ul class="space-y-2 text-xs sm:text-sm text-gray-600">
+                    <li>• <strong>Estilos y jerarquía:</strong> Títulos estandarizados que garantizan formato uniforme.</li>
+                    <li>• <strong>Índices automáticos:</strong> Tablas de contenido, figuras y tablas actualizables en un clic.</li>
+                    <li>• <strong>Citación y bibliografía:</strong> Gestión integrada de referencias bajo Normas APA.</li>
+                    <li>• <strong>Control de cambios y comentarios:</strong> Revisión auditable entre redactores y supervisores.</li>
+                    <li>• <strong>Combinación de correspondencia:</strong> Generación masiva de cartas, certificados o notificaciones.</li>
+                  </ul>
+                </div>
+
+                <div class="p-4 sm:p-5 rounded-xl bg-gray-50 border border-gray-200">
+                  <h4 class="text-sm font-bold text-gray-900 mb-2.5">Aplicación en Contabilidad y Auditoría</h4>
+                  <ul class="space-y-2 text-xs sm:text-sm text-gray-600">
+                    <li>• Redacción de <strong>informes de auditoría</strong> y dictámenes financieros con anexos numerados.</li>
+                    <li>• Elaboración de <strong>memorandos internos</strong>, políticas contables y manuales de procedimientos.</li>
+                    <li>• Preparación de contratos, oficios institucionales e informes técnicos para gerencia.</li>
+                    <li>• Redacción colaborativa en tiempo real de proyectos académicos y trabajos de titulación.</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- Subtema 1.2 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">1.2</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Hoja de cálculo y su aplicación profesional y contable</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-5">
+                Herramientas como <strong>Microsoft Excel</strong> y <strong>Google Sheets</strong> son pilares del ejercicio contable y financiero, ya que transforman grandes volúmenes de datos numéricos en información clara para la toma de decisiones.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
+                <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                  <h4 class="text-sm font-bold text-gray-900 mb-1">Organización de datos</h4>
+                  <p class="text-xs text-gray-600">Tablas estructuradas, validación de datos, filtros y formato condicional para detectar alertas.</p>
+                </div>
+                <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                  <h4 class="text-sm font-bold text-gray-900 mb-1">Fórmulas y funciones</h4>
+                  <p class="text-xs text-gray-600">Búsqueda (BUSCARX/BUSCARV), lógicas (SI, Y, O) y financieras (VNA, TIR, PAGO).</p>
+                </div>
+                <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                  <h4 class="text-sm font-bold text-gray-900 mb-1">Tablas dinámicas</h4>
+                  <p class="text-xs text-gray-600">Resumen instantáneo de registros contables por cuenta, periodo, sucursal o centro de costos.</p>
+                </div>
+                <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                  <h4 class="text-sm font-bold text-gray-900 mb-1">Gráficos ejecutivos</h4>
+                  <p class="text-xs text-gray-600">Visualización de tendencias de ingresos, gastos, flujos de caja y tableros (dashboards).</p>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-uta-light/60 border border-uta-border text-xs sm:text-sm text-gray-800">
+                <strong>Usos prácticos clave:</strong> conciliaciones bancarias, roles de pago, tablas de amortización, control de inventarios, presupuestos anuales y análisis horizontal/vertical de estados financieros.
+              </div>
+            </section>
+
+            <!-- Enlaces oficiales -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3">Plataformas oficiales</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a href="https://www.microsoft.com/es-es/microsoft-365" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 hover:border-uta hover:bg-uta-light/40 transition-colors group">
+                  <div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-uta">Microsoft 365 (Word y Excel)</p>
+                    <p class="text-xs text-gray-500">Suite ofimática estándar corporativa</p>
+                  </div>
+                  <span class="text-xs font-semibold text-uta">Abrir ↗</span>
+                </a>
+                <a href="https://workspace.google.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 hover:border-uta hover:bg-uta-light/40 transition-colors group">
+                  <div>
+                    <p class="text-sm font-semibold text-gray-900 group-hover:text-uta">Google Workspace (Docs y Sheets)</p>
+                    <p class="text-xs text-gray-500">Edición en la nube y colaboración en línea</p>
+                  </div>
+                  <span class="text-xs font-semibold text-uta">Abrir ↗</span>
+                </a>
+              </div>
+            </section>
+          `;
+
+        case 'u4-t2':
+          return `
+            <!-- Subtema 2.1 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">2.1</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Usos de las presentaciones para la transmisión de la información</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-4">
+                Una presentación efectiva actúa como <strong>apoyo visual estratégico</strong> del expositor, no como un guion de lectura. Su propósito es facilitar la comprensión rápida de ideas complejas en defensas académicas, juntas directivas y reportes financieros.
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+                  <h4 class="text-sm font-bold text-gray-900 mb-1">Jerarquía visual</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Uso equilibrado de títulos claros, contraste legible, espacios en blanco y una paleta coherente.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+                  <h4 class="text-sm font-bold text-gray-900 mb-1">Regla de síntesis</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Baja densidad de texto: una idea principal por diapositiva y frases cortas en lugar de párrafos extensos.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200">
+                  <h4 class="text-sm font-bold text-gray-900 mb-1">Gráficos e infografías</h4>
+                  <p class="text-xs sm:text-sm text-gray-600">Reemplazar bloques de cifras por diagramas, iconos y gráficos que destaquen el hallazgo principal.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Subtema 2.2 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">2.2</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Aplicación de presentaciones: PowerPoint, Prezi y Canva</h3>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                <!-- PowerPoint -->
+                <div class="p-5 rounded-xl border border-gray-200 flex flex-col justify-between bg-white">
+                  <div>
+                    <h4 class="text-base font-bold text-gray-900 mb-1.5">Microsoft PowerPoint</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 mb-3">Estándar corporativo y académico. Ofrece control total de diapositivas, integración nativa con gráficos de Excel y modo moderador.</p>
+                    <p class="text-xs text-gray-500 mb-4"><strong>Ideal para:</strong> informes financieros, sustentaciones formales y exposiciones con datos.</p>
+                  </div>
+                  <a href="https://www.microsoft.com/es-es/microsoft-365/powerpoint" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-uta hover:underline inline-flex items-center gap-1">
+                    Visitar microsoft.com ↗
+                  </a>
+                </div>
+
+                <!-- Prezi -->
+                <div class="p-5 rounded-xl border border-gray-200 flex flex-col justify-between bg-white">
+                  <div>
+                    <h4 class="text-base font-bold text-gray-900 mb-1.5">Prezi</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 mb-3">Plataforma de narrativa dinámica no lineal basada en un lienzo abierto con transiciones de acercamiento (efecto zoom).</p>
+                    <p class="text-xs text-gray-500 mb-4"><strong>Ideal para:</strong> mapas conceptuales, recorridos temáticos y ponencias interactivas.</p>
+                  </div>
+                  <a href="https://prezi.com" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-uta hover:underline inline-flex items-center gap-1">
+                    Visitar prezi.com ↗
+                  </a>
+                </div>
+
+                <!-- Canva -->
+                <div class="p-5 rounded-xl border border-gray-200 flex flex-col justify-between bg-white">
+                  <div>
+                    <h4 class="text-base font-bold text-gray-900 mb-1.5">Canva</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 mb-3">Herramienta de diseño gráfico ágil en línea con miles de plantillas modernas, bancos de iconos, infografías y exportación multipropósito.</p>
+                    <p class="text-xs text-gray-500 mb-4"><strong>Ideal para:</strong> presentaciones visualmente atractivas en poco tiempo y proyectos creativos.</p>
+                  </div>
+                  <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-uta hover:underline inline-flex items-center gap-1">
+                    Visitar canva.com ↗
+                  </a>
+                </div>
+              </div>
+
+              <!-- Tabla comparativa rápida -->
+              <div class="overflow-x-auto table-scroll rounded-xl border border-gray-200">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                  <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-gray-700">
+                      <th class="py-2.5 px-4 font-semibold">Herramienta</th>
+                      <th class="py-2.5 px-4 font-semibold">Estructura</th>
+                      <th class="py-2.5 px-4 font-semibold">Fortaleza principal</th>
+                      <th class="py-2.5 px-4 font-semibold">Trabajo sin conexión</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 text-gray-600">
+                    <tr>
+                      <td class="py-2.5 px-4 font-semibold text-gray-900">PowerPoint</td>
+                      <td class="py-2.5 px-4">Lineal por diapositivas</td>
+                      <td class="py-2.5 px-4">Precisión técnica y vínculo con Excel</td>
+                      <td class="py-2.5 px-4">Completo (app escritorio)</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2.5 px-4 font-semibold text-gray-900">Prezi</td>
+                      <td class="py-2.5 px-4">No lineal (lienzo zoom)</td>
+                      <td class="py-2.5 px-4">Impacto visual y visión panorámica</td>
+                      <td class="py-2.5 px-4">Solo en planes de pago</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2.5 px-4 font-semibold text-gray-900">Canva</td>
+                      <td class="py-2.5 px-4">Lineal basada en diseño</td>
+                      <td class="py-2.5 px-4">Rapidez y estética profesional</td>
+                      <td class="py-2.5 px-4">Requiere internet (exporta PDF/PPTX)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- Subtema 2.3 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">2.3</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Aplicación de presentaciones con trabajo colaborativo</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-4">
+                Las plataformas en la nube —como <strong>PowerPoint Online, Google Slides y Canva</strong>— eliminan el envío repetitivo de archivos por correo y permiten que equipos de trabajo construyan una presentación de manera sincronizada.
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs sm:text-sm">
+                <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+                  <p class="font-semibold text-gray-900 mb-1">Edición simultánea</p>
+                  <p class="text-gray-600">Varios integrantes trabajan al mismo tiempo en distintas diapositivas.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+                  <p class="font-semibold text-gray-900 mb-1">Comentarios y menciones</p>
+                  <p class="text-gray-600">Retroalimentación directa sobre elementos específicos mediante @menciones.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+                  <p class="font-semibold text-gray-900 mb-1">Control de permisos</p>
+                  <p class="text-gray-600">Roles diferenciados de lector, comentador o editor para proteger el contenido.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+                  <p class="font-semibold text-gray-900 mb-1">Historial de versiones</p>
+                  <p class="text-gray-600">Registro automático de cambios con opción de restaurar versiones previas.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Subtema 2.4 -->
+            <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+              <div class="flex items-center gap-2.5 mb-3">
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-uta-light text-uta border border-uta-border">2.4</span>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Utilización de Microsoft Copilot, Gemini e IA Generativa</h3>
+              </div>
+              <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-5">
+                La inteligencia artificial generativa potencia la productividad académica y profesional al asistir en la creación de <strong>documentos, hojas de cálculo, informes y presentaciones</strong>, funcionando como un copiloto analítico y creativo.
+              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <div class="p-5 rounded-xl border border-gray-200 bg-gray-50/70 flex flex-col justify-between">
+                  <div>
+                    <h4 class="text-base font-bold text-gray-900 mb-1.5">Microsoft Copilot</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 mb-4">Asistente integrado en el ecosistema Microsoft 365. Ayuda a redactar borradores en Word, generar fórmulas y análisis de tablas en Excel, y transformar informes en esquemas de diapositivas en PowerPoint.</p>
+                  </div>
+                  <a href="https://copilot.microsoft.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 py-2 px-3.5 rounded-lg bg-gray-900 hover:bg-uta text-white text-xs font-medium transition-colors self-start">
+                    Abrir Microsoft Copilot ↗
+                  </a>
+                </div>
+
+                <div class="p-5 rounded-xl border border-gray-200 bg-gray-50/70 flex flex-col justify-between">
+                  <div>
+                    <h4 class="text-base font-bold text-gray-900 mb-1.5">Google Gemini</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 mb-4">Modelo multimodal de Google conectado con Google Workspace. Permite sintetizar textos extensos, estructurar informes, explicar conceptos complejos, crear guiones de presentaciones y depurar fórmulas de hojas de cálculo.</p>
+                  </div>
+                  <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 py-2 px-3.5 rounded-lg bg-gray-900 hover:bg-uta text-white text-xs font-medium transition-colors self-start">
+                    Abrir Google Gemini ↗
+                  </a>
+                </div>
+              </div>
+
+              <!-- Uso responsable -->
+              <div class="p-5 rounded-xl bg-uta-light/60 border border-uta-border">
+                <h4 class="text-sm font-bold text-uta mb-2">Recomendaciones de uso ético y responsable</h4>
+                <ul class="space-y-1.5 text-xs sm:text-sm text-gray-800">
+                  <li>• <strong>Diseño de prompts claros:</strong> Especificar rol, contexto, formato esperado y público objetivo para obtener respuestas precisas.</li>
+                  <li>• <strong>Verificación de fuentes:</strong> Contrastar siempre cifras, citas bibliográficas y normas legales (la IA puede generar imprecisiones).</li>
+                  <li>• <strong>Originalidad y criterio académico:</strong> Utilizar la IA como apoyo para estructurar o revisar, manteniendo el análisis crítico y la autoría propia.</li>
+                  <li>• <strong>Privacidad de datos:</strong> Evitar subir información confidencial, estados financieros privados o datos personales sensibles.</li>
+                </ul>
+              </div>
+            </section>
+          `;
+
+        default:
+          return '';
+      }
+    }
+
+    // =========================================================================
+    // 4. SECCIÓN DE RECURSOS EN VIDEO + INCRUSTACIÓN PERSONALIZADA DE YOUTUBE
+    // =========================================================================
+    function renderVideoSection(topic) {
+      const savedList = appState.customVideos[topic.id] || [];
+
+      const recommendedCards = topic.videos
+        .map(
+          (v) => `
+          <a
+            href="${v.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex items-start gap-3.5 p-4 rounded-xl border border-gray-200 bg-white hover:border-uta hover:shadow-sm transition-all"
+          >
+            <div class="w-10 h-10 rounded-lg bg-uta-light text-uta flex items-center justify-center shrink-0 group-hover:bg-uta group-hover:text-white transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-semibold text-gray-900 group-hover:text-uta transition-colors leading-snug">
+                ${escapeHtml(v.title)}
+              </p>
+              <p class="text-xs text-gray-500 mt-1">${escapeHtml(v.subtitle)}</p>
+              <span class="inline-flex items-center gap-1 mt-2 text-[11px] font-semibold text-uta">
+                Ver tutoriales en YouTube ↗
+              </span>
+            </div>
+          </a>
+        `
+        )
+        .join('');
+
+      const customCards = savedList.length
+        ? `
+          <div class="mt-5 pt-5 border-t border-gray-200">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
+              Videos incrustados en este tema (${savedList.length})
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              ${savedList
+                .map(
+                  (item) => `
+                <div class="rounded-xl border border-gray-200 bg-gray-50 overflow-hidden">
+                  <div class="relative w-full aspect-video bg-black">
+                    <iframe
+                      src="https://www.youtube.com/embed/${item.videoId}"
+                      title="${escapeHtml(item.title)}"
+                      class="absolute inset-0 w-full h-full"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+                  <div class="p-3 flex items-center justify-between gap-2">
+                    <p class="text-xs font-medium text-gray-800 truncate">${escapeHtml(item.title)}</p>
+                    <button
+                      type="button"
+                      onclick="removeCustomVideo('${topic.id}', '${item.uid}')"
+                      class="text-xs font-medium text-gray-500 hover:text-uta px-2 py-1 rounded-md hover:bg-uta-light transition-colors shrink-0"
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                </div>
+              `
+                )
+                .join('')}
+            </div>
+          </div>
+        `
+        : '';
+
+      return `
+        <section class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-7">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-gray-900">Recursos en Video (YouTube)</h3>
+              <p class="text-xs sm:text-sm text-gray-500">Material audiovisual de apoyo seleccionado para reforzar este tema.</p>
+            </div>
+
+            <!-- Botón discreto para incrustar un enlace de YouTube propio -->
+            <button
+              type="button"
+              onclick="toggleVideoForm()"
+              class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-uta bg-gray-50 hover:bg-uta-light border border-gray-200 hover:border-uta-border px-3 py-2 rounded-lg transition-colors self-start sm:self-auto"
+            >
+              <span>+</span>
+              <span>Incrustar video propio</span>
+            </button>
+          </div>
+
+          <!-- Formulario desplegable discreto -->
+          <form
+            id="custom-video-form"
+            onsubmit="handleAddCustomVideo(event, '${topic.id}')"
+            class="hidden mb-5 p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3"
+          >
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="yt-url-input" class="block text-xs font-medium text-gray-700 mb-1">Enlace de YouTube *</label>
+                <input
+                  id="yt-url-input"
+                  type="url"
+                  required
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-uta/30 focus:border-uta"
+                />
+              </div>
+              <div>
+                <label for="yt-title-input" class="block text-xs font-medium text-gray-700 mb-1">Título opcional</label>
+                <input
+                  id="yt-title-input"
+                  type="text"
+                  placeholder="Ej. Tutorial de clase"
+                  class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-uta/30 focus:border-uta"
+                />
+              </div>
+            </div>
+            <div class="flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onclick="toggleVideoForm()"
+                class="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 rounded-lg"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-1.5 text-xs font-semibold text-white bg-uta hover:bg-uta-dark rounded-lg transition-colors"
+              >
+                Guardar e incrustar
+              </button>
+            </div>
+          </form>
+
+          <!-- Tarjetas de videos recomendados -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            ${recommendedCards}
+          </div>
+
+          <!-- Videos propios guardados en localStorage -->
+          ${customCards}
+        </section>
+      `;
+    }
+
+    function toggleVideoForm() {
+      const form = document.getElementById('custom-video-form');
+      if (!form) return;
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        const input = document.getElementById('yt-url-input');
+        if (input) input.focus();
+      }
+    }
+
+    function handleAddCustomVideo(event, topicId) {
+      event.preventDefault();
+      const urlInput = document.getElementById('yt-url-input');
+      const titleInput = document.getElementById('yt-title-input');
+      const videoId = extractYouTubeId(urlInput.value);
+
+      if (!videoId) {
+        showToast('Ingresa un enlace válido de YouTube (youtube.com o youtu.be).', 'error');
+        return;
+      }
+
+      const title = titleInput.value.trim() || 'Video de apoyo del estudiante';
+      if (!appState.customVideos[topicId]) {
+        appState.customVideos[topicId] = [];
+      }
+
+      appState.customVideos[topicId].push({
+        uid: 'vid_' + Date.now(),
+        videoId,
+        title,
+      });
+
+      saveCustomVideos();
+      render();
+      showToast('Video incrustado y guardado en este navegador.');
+    }
+
+    function removeCustomVideo(topicId, uid) {
+      if (!appState.customVideos[topicId]) return;
+      appState.customVideos[topicId] = appState.customVideos[topicId].filter((v) => v.uid !== uid);
+      saveCustomVideos();
+      render();
+      showToast('Video eliminado de la lista.');
+    }
+
+    // =========================================================================
+    // 5. NAVEGACIÓN Y RENDERIZADO PRINCIPAL
+    // =========================================================================
+    function selectUnit(unitId) {
+      appState.currentUnit = unitId;
+      appState.currentTopic = null;
+      render();
+    }
+
+    function openTopic(topicId) {
+      appState.currentTopic = topicId;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function backToUnit() {
+      appState.currentTopic = null;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateTabsUI() {
+      ['u3', 'u4'].forEach((id) => {
+        const btn = document.getElementById('tab-' + id);
+        if (!btn) return;
+        const isActive = appState.currentUnit === id;
+        if (isActive) {
+          btn.className =
+            'group flex flex-col sm:flex-row sm:items-center sm:justify-between text-left px-4 sm:px-5 py-3.5 rounded-xl border border-uta bg-uta text-white shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-uta/30';
+        } else {
+          btn.className =
+            'group flex flex-col sm:flex-row sm:items-center sm:justify-between text-left px-4 sm:px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 hover:bg-white hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-uta/30';
+        }
+      });
+    }
+
+    function render() {
+      updateTabsUI();
+      const container = document.getElementById('main-content');
+      const unit = UNITS_DATA[appState.currentUnit];
+
+      // Vista 1: Tarjetas de temas de la unidad
+      if (!appState.currentTopic) {
+        const topicCardsHtml = unit.topics
+          .map(
+            (topic) => `
+            <button
+              type="button"
+              onclick="openTopic('${topic.id}')"
+              class="group text-left bg-white rounded-2xl border border-gray-200 p-6 sm:p-7 hover:border-uta hover:shadow-md transition-all duration-200 flex flex-col justify-between focus:outline-none focus:ring-2 focus:ring-uta/30"
+            >
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-uta-light text-uta border border-uta-border">
+                    ${unit.label} · ${topic.number}
+                  </span>
+                  <span class="text-xs font-medium text-gray-400 group-hover:text-uta transition-colors">
+                    Explorar →
+                  </span>
+                </div>
+
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-uta transition-colors leading-snug mb-2.5">
+                  ${topic.title}
+                </h3>
+
+                <p class="text-sm text-gray-600 leading-relaxed mb-5">
+                  ${topic.summary}
+                </p>
+              </div>
+
+              <div class="flex flex-wrap gap-2 pt-4 border-t border-gray-100">
+                ${topic.tags
+                  .map(
+                    (tag) =>
+                      `<span class="px-2.5 py-1 text-[11px] font-medium rounded-full bg-gray-100 text-gray-600">${tag}</span>`
+                  )
+                  .join('')}
+              </div>
+            </button>
+          `
+          )
+          .join('');
+
+        container.innerHTML = `
+          <div class="animate-view space-y-6">
+            <div class="border-b border-gray-200 pb-5">
+              <span class="text-xs font-semibold uppercase tracking-wider text-uta">${unit.label}</span>
+              <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mt-1">${unit.title}</h2>
+              <p class="text-sm sm:text-base text-gray-600 mt-1.5 max-w-3xl">${unit.description}</p>
+            </div>
+
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
+                Selecciona un tema para ver el contenido completo
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                ${topicCardsHtml}
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Vista 2: Detalle del tema seleccionado
+      const topic = unit.topics.find((t) => t.id === appState.currentTopic);
+      if (!topic) {
+        appState.currentTopic = null;
+        render();
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="animate-view space-y-6">
+          <!-- Botón de retorno -->
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <button
+              type="button"
+              onclick="backToUnit()"
+              class="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-uta bg-white hover:bg-uta-light border border-gray-200 hover:border-uta-border px-4 py-2 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-uta/30"
+            >
+              <span>←</span>
+              <span>Volver a los temas de la ${unit.label}</span>
+            </button>
+
+            <span class="text-xs font-medium text-gray-500">
+              ${unit.label} / <strong class="text-gray-800">${topic.number}</strong>
+            </span>
+          </div>
+
+          <!-- Cabecera del tema -->
+          <div class="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 border-l-4 border-l-uta">
+            <span class="inline-block text-xs font-semibold uppercase tracking-wider text-uta mb-1.5">
+              ${unit.label} · ${topic.number}
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              ${topic.title}
+            </h2>
+            <p class="text-sm sm:text-base text-gray-600 mt-2 leading-relaxed">
+              ${topic.summary}
+            </p>
+          </div>
+
+          <!-- Contenidos académicos del tema -->
+          <div class="space-y-5">
+            ${getTopicDetailHtml(topic.id)}
+            ${renderVideoSection(topic)}
+          </div>
+        </div>
+      `;
+    }
+
+    // Inicialización al cargar el DOM
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>
